@@ -1,0 +1,18 @@
+# Netlify redirects for unccgamedev.org (moved from Squarespace Domain Forwarding).
+# First match wins. "!" forces the redirect even if a file exists.
+# 302 for external profiles so a destination can change without browsers caching the old one.
+# Each host below must be added to this Netlify site as a domain alias (see DNS.md).
+
+# --- Subdomain forwards ---
+https://github.unccgamedev.org/*     https://github.com/UNCCGameDevelopers/   302!
+https://discord.unccgamedev.org/*    https://discord.gg/FapBcQY               302!
+https://itch.unccgamedev.org/*       https://unccgamedev.itch.io/             302!
+https://twitter.unccgamedev.org/*    https://www.twitter.com/@GameDevAtUNCC   302!
+https://twitch.unccgamedev.org/*     https://www.twitch.tv/unccgamedev        302!
+https://instagram.unccgamedev.org/*  https://www.instagram.com/UNCCGameDev    302!
+https://gamejam.unccgamedev.org/*    https://www.unccgamedev.org/gamejam      301!
+# Was a CNAME holding a URL (invalid DNS), now a real redirect.
+https://ggj2023.unccgamedev.org/*    https://globalgamejam.org/2023/jam-sites/university-north-carolina-charlotte  301!
+
+# --- Apex and anything else on this site -> main website (Google Sites on www) ---
+/*    https://www.unccgamedev.org/:splat    301!
