@@ -14,18 +14,20 @@ https://gamejam.unccgamedev.org/*    https://www.unccgamedev.org/gamejam      30
 # Was a CNAME holding a URL (invalid DNS), now a real redirect.
 https://ggj2023.unccgamedev.org/*    https://globalgamejam.org/2023/jam-sites/university-north-carolina-charlotte  301!
 
-# --- Shortlink Redirects ---
-/github                              github.unccgamedev.org
-/gh                                  github.unccgamedev.org
-/discord                             discord.unccgamedev.org
-/gg                                  discord.unccgamedev.org
-/itch                                itch.unccgamedev.org
-/twitter                             twitter.unccgamedev.org
-/ig                                  instagram.unccgamedev.org
-/instagram                           instagram.unccgamedev.org
+# --- Path short links (unccgamedev.org/<name>) ---
+# They go through the subdomains above, so each destination is defined in one place.
+# Must stay above the /* catch-all (first match wins). Trailing slashes match too.
+/github       https://github.unccgamedev.org/       302!
+/gh           https://github.unccgamedev.org/       302!
+/discord      https://discord.unccgamedev.org/      302!
+/gg           https://discord.unccgamedev.org/      302!
+/itch         https://itch.unccgamedev.org/         302!
+/twitter      https://twitter.unccgamedev.org/      302!
+/ig           https://instagram.unccgamedev.org/    302!
+/instagram    https://instagram.unccgamedev.org/    302!
 
-# --- Public Gamejam marketing redirects ---
-/gamejam/49/2026/fall/submit-theme https://forms.gle/F4MrRUoYPBCmCxKF8 
+# --- Game jam marketing links (302: temporary, safe to change after the event) ---
+/gamejam/49/2026/fall/submit-theme    https://forms.gle/F4MrRUoYPBCmCxKF8    302!
 
 # --- Public Game Dev Github Developer Redirects ---
 /gh/website https://github.com/UNCCGameDevelopers/unccgamedev.org
