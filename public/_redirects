@@ -14,7 +14,7 @@ https://gamejam.unccgamedev.org/*    https://www.unccgamedev.org/gamejam      30
 # Was a CNAME holding a URL (invalid DNS), now a real redirect.
 https://ggj2023.unccgamedev.org/*    https://globalgamejam.org/2023/jam-sites/university-north-carolina-charlotte  301!
 
-# --- shortlink redirects ---
+# --- Shortlink Redirects ---
 /github                              github.unccgamedev.org
 /gh                                  github.unccgamedev.org
 /discord                             discord.unccgamedev.org
@@ -24,8 +24,11 @@ https://ggj2023.unccgamedev.org/*    https://globalgamejam.org/2023/jam-sites/un
 /ig                                  instagram.unccgamedev.org
 /instagram                           instagram.unccgamedev.org
 
-# --- gamejam marketing redirects ---
+# --- Public Gamejam marketing redirects ---
 /gamejam/49/2026/fall/submit-theme https://forms.gle/F4MrRUoYPBCmCxKF8 
+
+# --- Public Game Dev Github Developer Redirects ---
+/gh/website https://github.com/UNCCGameDevelopers/unccgamedev.org
 
 # --- Apex and anything else on this site -> main website (Google Sites on www) ---
 /*    https://www.unccgamedev.org/:splat    301!
