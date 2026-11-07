@@ -29,5 +29,8 @@ https://ggj2023.unccgamedev.org/*    https://globalgamejam.org/2023/jam-sites/un
 # --- Game jam marketing links (302: temporary, safe to change after the event) ---
 /gamejam/49/2026/fall/submit-theme    https://forms.gle/F4MrRUoYPBCmCxKF8    302!
 
+# --- Public Game Dev Github Developer Redirects ---
+/gh/website https://github.com/UNCCGameDevelopers/unccgamedev.org
+
 # --- Apex and anything else on this site -> main website (Google Sites on www) ---
 /*    https://www.unccgamedev.org/:splat    301!
