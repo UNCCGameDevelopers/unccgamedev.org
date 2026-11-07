@@ -2,10 +2,10 @@ name: Check redirects
 
 on:
   pull_request:
-    paths: ["public/_redirects", "netlify.toml", "scripts/check-redirects.mjs", ".github/workflows/check-redirects.yml"]
+    paths: ["public/_redirects", "netlify.toml", "scripts/**", "test/**", ".github/workflows/check-redirects.yml"]
   push:
     branches: [main]
-    paths: ["public/_redirects", "netlify.toml", "scripts/check-redirects.mjs", ".github/workflows/check-redirects.yml"]
+    paths: ["public/_redirects", "netlify.toml", "scripts/**", "test/**", ".github/workflows/check-redirects.yml"]
 
 permissions:
   contents: read
@@ -21,4 +21,5 @@ jobs:
         with:
           node-version: 22
       - run: npm install --no-save --no-package-lock @netlify/redirect-parser@16.1.1
+      - run: node --test test/*.test.mjs
       - run: node scripts/check-redirects.mjs public/_redirects
