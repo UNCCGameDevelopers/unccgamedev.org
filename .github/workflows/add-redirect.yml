@@ -1,0 +1,127 @@
+name: Add redirect
+
+# Opens a PR that adds one short link to public/_redirects.
+# Only people with write access can run this. Merging the PR deploys it through Netlify.
+on:
+  workflow_dispatch:
+    inputs:
+      category:
+        description: "Type of link"
+        type: choice
+        required: true
+        options:
+          - subdomain   # https://<name>.unccgamedev.org
+          - shortlink   # https://unccgamedev.org/<name>
+          - gamejam     # https://unccgamedev.org/gamejam/<name>
+          - github      # https://unccgamedev.org/gh/<name>
+      name:
+        description: "subdomain: youtube | shortlink: yt | gamejam: 50/2027/spring/signup | github: skate-vault"
+        type: string
+        required: true
+      destination:
+        description: "https:// URL to send people to (github: leave empty for github.com/UNCCGameDevelopers/<name>)"
+        type: string
+        required: false
+      status:
+        description: "302 = temporary (can change later), 301 = permanent (browsers cache it)"
+        type: choice
+        default: "302"
+        options: ["302", "301"]
+      path_link:
+        description: "subdomain only: also add unccgamedev.org/<name>"
+        type: boolean
+        default: true
+      dry_run:
+        description: "Only validate and show the change, don't open a PR"
+        type: boolean
+        default: false
+
+permissions: {}
+
+concurrency:
+  group: add-redirect
+  cancel-in-progress: false
+
+jobs:
+  add:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write        # push the PR branch
+      pull-requests: write   # open the PR
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+      - run: npm install --no-save --no-package-lock @netlify/redirect-parser@16.1.1
+
+      # Inputs go through env only, never ${{ }} inside the script, so they can't inject shell.
+      - name: Add rule
+        id: add
+        env:
+          IN_CATEGORY: ${{ inputs.category }}
+          IN_NAME: ${{ inputs.name }}
+          IN_DESTINATION: ${{ inputs.destination }}
+          IN_STATUS: ${{ inputs.status }}
+          IN_PATH_LINK: ${{ inputs.path_link }}
+        run: node scripts/add-redirect.mjs public/_redirects
+
+      - name: Verify redirects file
+        run: |
+          node --test test/*.test.mjs
+          node scripts/check-redirects.mjs public/_redirects
+
+      - name: Verify destination responds
+        id: reach
+        env:
+          DEST: ${{ steps.add.outputs.destination }}
+        run: |
+          code=$(curl -s -o /dev/null -L --max-redirs 5 --max-time 15 -A "Mozilla/5.0 (unccgamedev.org link check)" -w '%{http_code}' -- "$DEST" || true)
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          case "$code" in
+            000) echo "::error::Destination did not respond (DNS or connection failure): $DEST"; exit 1 ;;
+            404|410) echo "::error::Destination returned $code (not found): $DEST"; exit 1 ;;
+            2*|3*) echo "Destination OK ($code)";;
+            *) echo "::warning::Destination returned $code. Some sites block automated checks, so please check it by hand.";;
+          esac
+
+      - name: Show change
+        run: |
+          { echo "### Redirect change"; echo '```diff'; git diff -U2 public/_redirects; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          git diff public/_redirects
+
+      - name: Open PR
+        if: ${{ !inputs.dry_run }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SLUG: ${{ steps.add.outputs.slug }}
+          LABEL: ${{ steps.add.outputs.label }}
+          ADDED: ${{ steps.add.outputs.added }}
+          DEST: ${{ steps.add.outputs.destination }}
+          CODE: ${{ steps.reach.outputs.code }}
+          CATEGORY: ${{ inputs.category }}
+          ACTOR: ${{ github.actor }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          branch="redirect/${CATEGORY}-${SLUG}-${GITHUB_RUN_ID}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898341+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add public/_redirects
+          git commit -m "Add ${CATEGORY} redirect: ${SLUG}" -m "Requested by @${ACTOR} via the Add redirect workflow (${RUN_URL})."
+          git push origin "$branch"
+          {
+            echo "Adds a **${CATEGORY}** redirect, requested by \`${ACTOR}\`."
+            echo
+            echo '```'
+            echo "$ADDED"
+            echo '```'
+            echo
+            echo "- Destination check: HTTP \`${CODE}\` for ${DEST}"
+            echo "- Netlify's redirect parser and the redirect tests passed in the [workflow run](${RUN_URL}). PRs opened by Actions don't trigger other workflows, so that run is the record."
+            if [ -n "$LABEL" ]; then
+              echo
+              echo "**Before this works:** add \`${LABEL}.unccgamedev.org\` as a domain alias on the Netlify site **unccgamedev-org** (Domain management → Add domain alias). Netlify DNS then creates the record and certificate."
+            fi
+          } > "$RUNNER_TEMP/body.md"
+          gh pr create --base main --head "$branch" --title "Add ${CATEGORY} redirect: ${SLUG}" --body-file "$RUNNER_TEMP/body.md"
