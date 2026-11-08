@@ -15,7 +15,7 @@ on:
           - gamejam     # https://unccgamedev.org/gamejam/<name>
           - github      # https://unccgamedev.org/gh/<name>
       name:
-        description: "subdomain: youtube | shortlink: yt | gamejam: 50/2027/spring/signup | github: skate-vault"
+        description: "subdomain: youtube | shortlink: yt | gamejam: 49/2027/spring/signup | ggj/2027/spring/signup
         type: string
         required: true
       destination:
@@ -23,7 +23,7 @@ on:
         type: string
         required: false
       status:
-        description: "302 = temporary (can change later), 301 = permanent (browsers cache it)"
+        description: "302 = temporary (default / can change later), 301 = permanent (browsers cache it)"
         type: choice
         default: "302"
         options: ["302", "301"]
