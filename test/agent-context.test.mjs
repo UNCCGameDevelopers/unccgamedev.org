@@ -11,7 +11,7 @@ const walk = (dir) => readdirSync(new URL(dir, root)).flatMap((f) => {
 });
 
 test("agent context files cite real paths, have frontmatter, and name no real people", () => {
-  const files = ["AGENTS.md", "CLAUDE.md", ".github/copilot-instructions.md", ...walk(".github/instructions/"), ...walk(".github/prompts/"), ...walk(".github/skills/"), ...walk(".github/agents/")];
+  const files = ["AGENTS.md", "CLAUDE.md", "DOCS.md", ".github/copilot-instructions.md", ...walk(".github/instructions/"), ...walk(".github/prompts/"), ...walk(".github/skills/"), ...walk(".github/agents/")];
   assert.ok(files.length >= 12, `found ${files.length} files`);
   for (const f of files) {
     const t = readFileSync(new URL(f, root), "utf8");
