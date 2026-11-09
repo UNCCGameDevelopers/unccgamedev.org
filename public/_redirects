@@ -17,14 +17,15 @@ https://ggj2023.unccgamedev.org/*    https://globalgamejam.org/2023/jam-sites/un
 # --- Path short links (unccgamedev.org/<name>) ---
 # They go through the subdomains above, so each destination is defined in one place.
 # Must stay above the /* catch-all (first match wins). Trailing slashes match too.
-/github       https://github.unccgamedev.org/       302!
-/gh           https://github.unccgamedev.org/       302!
-/discord      https://discord.unccgamedev.org/      302!
-/gg           https://discord.unccgamedev.org/      302!
-/itch         https://unccgamedev.itch.io/          302!
-/twitter      https://twitter.unccgamedev.org/      302!
-/ig           https://instagram.unccgamedev.org/    302!
-/instagram    https://instagram.unccgamedev.org/    302!
+/github       https://github.com/UNCCGameDevelopers/        302!
+/gh           https://github.com/UNCCGameDevelopers/        302!
+/discord      https://discord.gg/FapBcQY                    302!
+/gg           https://discord.gg/FapBcQY                    302!
+/itch         https://unccgamedev.itch.io/                  302!
+/twitter      https://www.twitter.com/@GameDevAtUNCC        302!
+/X            https://www.X.com/@GameDevAtUNCC              302!
+/ig           https://www.instagram.com/UNCCGameDev         302!
+/instagram    https://www.instagram.com/UNCCGameDev         302!
 
 # --- Game jam marketing links (302: temporary, safe to change after the event) ---
 /gamejam/49/2026/fall/submit-theme    https://forms.gle/F4MrRUoYPBCmCxKF8    302!
